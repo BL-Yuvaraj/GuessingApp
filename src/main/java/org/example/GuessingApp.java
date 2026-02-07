@@ -1,26 +1,59 @@
 package org.example;
+import org.example.GameConfig;
+import org.example.GuessValidator;
+
+import java.util.Scanner;
 
 /**
- * Hello world!
+ * MAIN CLASS
  *
+ * Coordinates the game flow:
+ * 1. Initialize game
+ * 2. Accept user guesses
+ * 3. Validate guesses
+ * 4. Stop when game ends
+ *
+ * @author Developer
+ * @version 2.0
  */
+public class GuessingApp {
 
-        /**
-         * GuessingApp - Use Case 1: Game Initialization
-         *
-         * This class serves as the application entry point.
-         * It initializes the game configuration and displays game rules.
-         *
-         * No user input or gameplay logic is implemented at this stage.
-         *
-         * @author Developer
-         * @version 1.0
-         */
-        public class GuessingApp {
+    public static void main(String[] args) {
 
-            public static void main(String[] args) {
-                System.out.println("Welcome to the Guessing App");
-                GameConfig gameConfig = new GameConfig();
-                gameConfig.showRules();
+        System.out.println("Welcome to the Guessing App");
+
+        GameConfig config = new GameConfig();
+        config.showRules();
+
+        Scanner scanner = new Scanner(System.in);
+        int attempts = 0;
+
+        while (attempts < config.getMaxAttempts()) {
+
+            System.out.print("Enter your guess: ");
+
+            // input safety
+            if (!scanner.hasNextInt()) {
+                System.out.println("Invalid input. Enter a number.");
+                scanner.next(); // discard bad input
+                continue;
+            }
+
+            int guess = scanner.nextInt();
+            attempts++;
+
+            String result = GuessValidator.validateGuess(
+                    guess, config.getTargetNumber());
+
+            System.out.println(result);
+
+            if ("CORRECT".equals(result)) {
+                System.out.println("You won in " + attempts + " attempts!");
+                return;
             }
         }
+
+        System.out.println("Game over! The correct number was: "
+                + config.getTargetNumber());
+    }
+}

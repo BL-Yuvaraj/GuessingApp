@@ -17,7 +17,7 @@ import java.util.Random;
  * - Random number generation
  */
 
-class GameConfig {
+public class GameConfig {
 
     private final int MIN = 1;
     private final int MAX = 100;
